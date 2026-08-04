@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    My Tasks
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="page-header">
+
+        <div>
+            <h1>My Tasks</h1>
+            <p>Manage your tasks and stay organized.</p>
+        </div>
+
+        <a href="{% url 'create_task' %}" class="btn">
+            + Create Task
+        </a>
+
+    </div>
+
+    <div class="stats-grid">
+
+    <div class="stat-card">
+
+        <span class="stat-label">
+            Total Tasks
+        </span>
+
+        <strong class="stat-number">
+            {{ total_tasks }}
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span class="stat-label">
+            Completed
+        </span>
+
+        <strong class="stat-number">
+            {{ completed_tasks }}
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span class="stat-label">
+            In Progress
+        </span>
+
+        <strong class="stat-number">
+            {{ in_progress_tasks }}
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span class="stat-label">
+            Pending
+        </span>
+
+        <strong class="stat-number">
+            {{ pending_tasks }}
+        </strong>
+
+    </div>
+
+    <div class="progress-card">
+
+    <div class="progress-header">
+
+        <div>
+            <h3>Task Progress</h3>
+
+            <p>
+                {{ completed_tasks }}
+                of
+                {{ total_tasks }}
+                tasks completed
+            </p>
+        </div>
+
+        <strong>
+            {{ completion_percentage }}%
+        </strong>
+
+    </div>
+
+</div>
+
+</div>
+
+    <div class="task-filters">
+
+    <form method="GET">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search tasks..."
+                value="{{ search }}"
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </div>
+
+
+        <div class="filter-options">
+
+            <select name="status">
+
+                <option value="">
+                    All Statuses
+                </option>
+
+                <option
+                    value="pending"
+                    {% if status == 'pending' %}selected{% endif %}
+                >
+                    Pending
+                </option>
+
+                <option
+                    value="in_progress"
+                    {% if status == 'in_progress' %}selected{% endif %}
+                >
+                    In Progress
+                </option>
+
+                <option
+                    value="completed"
+                    {% if status == 'completed' %}selected{% endif %}
+                >
+                    Completed
+                </option>
+
+            </select>
+
+
+            <select name="priority">
+
+                <option value="">
+                    All Priorities
+                </option>
+
+                <option
+                    value="low"
+                    {% if priority == 'low' %}selected{% endif %}
+                >
+                    Low
+                </option>
+
+                <option
+                    value="medium"
+                    {% if priority == 'medium' %}selected{% endif %}
+                >
+                    Medium
+                </option>
+
+                <option
+                    value="high"
+                    {% if priority == 'high' %}selected{% endif %}
+                >
+                    High
+                </option>
+
+            </select>
+
+
+            <a href="{% url 'task_list' %}">
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+    {% if tasks %}
+
+        <div class="task-grid">
+
+            {% for task in tasks %}
+
+                <div class="task-card">
+
+                    <div class="task-header">
+
+                        <h2>{{ task.title }}</h2>
+
+                        <span class="priority {{ task.priority }}">
+                            {{ task.get_priority_display }}
+                        </span>
+
+                    </div>
+
+
+                    {% if task.description %}
+
+                        <p class="description">
+                            {{ task.description }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="description">
+                            No description provided.
+                        </p>
+
+                    {% endif %}
+
+
+                    <div class="task-info">
+
+                        <span>
+                            Status:
+                            <strong>
+                                {{ task.get_status_display }}
+                            </strong>
+                        </span>
+
+
+                        {% if task.due_date %}
+
+                            <span>
+                                Due:
+                                <strong>
+                                    {{ task.due_date }}
+                                </strong>
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+                    <div class="task-actions">
+                        <a href="{% url 'task_details' task.pk %}">View</a>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <h2>No tasks yet</h2>
+
+            <p>
+                Create your first task to get started.
+            </p>
+
+            <a href="#" class="btn">
+                Create Task
+            </a>
+
+        </div>
+
+    {% endif %}
+
+{% endblock %}

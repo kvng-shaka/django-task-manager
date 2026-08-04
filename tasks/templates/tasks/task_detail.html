@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    {{ task.title }}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="task-detail">
+
+        <div class="detail-header">
+
+            <div>
+                <span class="priority {{ task.priority }}">
+                    {{ task.get_priority_display }}
+                </span>
+
+                <h1>{{ task.title }}</h1>
+            </div>
+
+            <span class="status">
+                {{ task.get_status_display }}
+            </span>
+
+        </div>
+
+
+        <div class="detail-content">
+
+            <h3>Description</h3>
+
+            {% if task.description %}
+                <p>{{ task.description }}</p>
+            {% else %}
+                <p>No description provided.</p>
+            {% endif %}
+
+        </div>
+
+
+        <div class="detail-info">
+
+            <div>
+                <small>Created</small>
+                <strong>
+                    {{ task.created_at|date:"M d, Y H:i" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <small>Last Updated</small>
+                <strong>
+                    {{ task.updated_at|date:"M d, Y H:i" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <small>Due Date</small>
+
+                <strong>
+                    {% if task.due_date %}
+                        {{ task.due_date|date:"M d, Y" }}
+                    {% else %}
+                        No due date
+                    {% endif %}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-actions">
+
+            <a
+                href="{% url 'task_list' %}"
+                class="cancel-btn"
+            >
+                ← Back
+            </a>
+
+            <a
+                href="{% url 'task_edit' task.pk %}"
+                class="btn"
+            >
+                Edit Task
+            </a>
+
+            <button
+                type="button"
+                class="delete-link"
+                onclick="openDeleteModal()"
+            >
+                Delete
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div id="deleteModal" class="modal">
+
+    <div class="modal-content">
+
+        <button
+            type="button"
+            class="modal-close"
+            onclick="closeDeleteModal()"
+        >
+            &times;
+        </button>
+
+        <h2>Delete Task?</h2>
+
+        <p>
+            Are you sure you want to delete
+            <strong>{{ task.title }}</strong>?
+        </p>
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="cancel-modal"
+                onclick="closeDeleteModal()"
+            >
+                Cancel
+            </button>
+
+            <form
+                method="POST"
+                action="{% url 'task_delete' task.pk %}"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="confirm-delete"
+                >
+                    Yes, Delete
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const deleteModal = document.getElementById('deleteModal');
+
+
+    function openDeleteModal() {
+        deleteModal.style.display = 'flex';
+    }
+
+
+    function closeDeleteModal() {
+        deleteModal.style.display = 'none';
+    }
+
+
+    window.addEventListener('click', function(event) {
+
+        if (event.target === deleteModal) {
+            closeDeleteModal();
+        }
+
+    });
+
+</script>
+
+{% endblock %}
