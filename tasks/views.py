@@ -5,7 +5,7 @@ from django.contrib.auth import login
 from django.db.models import Q
 
 from .models import Task
-from .forms import TaskForm
+from .forms import ProfileForm, TaskForm
 
 # Create your views here.
 
@@ -103,4 +103,14 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+
+
+@login_required
+def profile(request):
+    user_profile = request.user.profile
+    return render(request, 'registration/profile.html', {'profile': user_profile})
+
+
+
 
