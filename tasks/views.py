@@ -5,7 +5,7 @@ from django.contrib.auth import login
 from django.db.models import Q
 
 from .models import Task
-from .forms import ProfileForm, TaskForm
+from .forms import ProfileForm, TaskForm, UserUpdateForm
 
 # Create your views here.
 
@@ -113,4 +113,18 @@ def profile(request):
 
 
 
+@login_required
+def edit_profile(request):
+    user_profile = request.user.profile
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, instance=user_profile)
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        if profile_form.is_valid() and user_form.is_valid():
+            profile_form.save()
+            user_form.save()
+            return redirect('profile')
+    else:
+        profile_form = ProfileForm(instance=user_profile)
+        user_form = UserUpdateForm(instance=request.user)
+    return render(request, 'registration/edit_profile.html', {'profile_form': profile_form, 'user_form': user_form})
 

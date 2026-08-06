@@ -1,5 +1,6 @@
 from django import forms
 from .models import Task, Profile
+from django.contrib.auth.models import User
 
 
 
@@ -23,3 +24,12 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'placeholder': 'Tell us a little about yourself...', 'rows': 5}),
         }
+
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
