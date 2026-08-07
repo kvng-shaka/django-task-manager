@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth import login, update_session_auth_hash
 from django.db.models import Q
+from datetime import date
 
 from .models import Task
 from .forms import ProfileForm, TaskForm, UserUpdateForm
@@ -40,6 +41,28 @@ def task_list(request):
         completion_percentage = round((completed_tasks / total_tasks) * 100)
     else:
         completion_percentage = 0
+
+    today = date.today()
+
+    for task in tasks:
+        task.is_overdue = (task.due_date and task.due_date < today and task.status != 'completed')
+        if task.due_date:
+            if task.due_date == today:
+                task.due_label = 'Due today'
+            elif task.due_date > today:
+                days_remaining = (task.due_date - today).days
+                if days_remaining == 1:
+                    task.due_label = 'Due tomorrow'
+                else:
+                    task.due_label = (f'Due in {days_remaining} days')
+            else:
+                days_overdue = (today - task.due_date).days
+                if days_overdue == 1:
+                    task.due_label = '1 day overdue'
+                else:
+                    task.due_label = (f'{days_overdue} days overdue')
+        else:
+            task.due_label = 'No due date'
 
     context = {
         'tasks': tasks,'search': search, 'status': status, 'priority': priority, 'total_tasks': total_tasks,
@@ -128,3 +151,28 @@ def edit_profile(request):
         user_form = UserUpdateForm(instance=request.user)
     return render(request, 'registration/edit_profile.html', {'profile_form': profile_form, 'user_form': user_form})
 
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important to keep the user logged in after password change
+            return redirect('profile')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'registration/change_password.html', {'form': form})
+
+
+
+@login_required
+def toggle_task_status(request, pk):
+    task = get_object_or_404(Task, pk=pk, owner=request.user)
+    if task.status == 'completed':
+        task.status = 'pending'
+    else:
+        task.status = 'completed'
+    task.save()
+    return redirect('task_list')

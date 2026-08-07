@@ -22,173 +22,183 @@
 
     <div class="stats-grid">
 
-    <div class="stat-card">
+        <div class="stat-card">
 
-        <span class="stat-label">
-            Total Tasks
-        </span>
+            <span class="stat-label">
+                Total Tasks
+            </span>
 
-        <strong class="stat-number">
-            {{ total_tasks }}
-        </strong>
+            <strong class="stat-number">
+                {{ total_tasks }}
+            </strong>
 
-    </div>
-
-
-    <div class="stat-card">
-
-        <span class="stat-label">
-            Completed
-        </span>
-
-        <strong class="stat-number">
-            {{ completed_tasks }}
-        </strong>
-
-    </div>
+        </div>
 
 
-    <div class="stat-card">
+        <div class="stat-card">
 
-        <span class="stat-label">
-            In Progress
-        </span>
+            <span class="stat-label">
+                Completed
+            </span>
 
-        <strong class="stat-number">
-            {{ in_progress_tasks }}
-        </strong>
+            <strong class="stat-number">
+                {{ completed_tasks }}
+            </strong>
 
-    </div>
+        </div>
 
 
-    <div class="stat-card">
+        <div class="stat-card">
 
-        <span class="stat-label">
-            Pending
-        </span>
+            <span class="stat-label">
+                In Progress
+            </span>
 
-        <strong class="stat-number">
-            {{ pending_tasks }}
-        </strong>
+            <strong class="stat-number">
+                {{ in_progress_tasks }}
+            </strong>
 
+        </div>
+
+
+        <div class="stat-card">
+
+            <span class="stat-label">
+                Pending
+            </span>
+
+            <strong class="stat-number">
+                {{ pending_tasks }}
+            </strong>
+
+        </div>
     </div>
 
     <div class="progress-card">
 
-    <div class="progress-header">
+        <div class="progress-header">
 
-        <div>
-            <h3>Task Progress</h3>
+            <div>
+                <h3>Task Progress</h3>
 
-            <p>
-                {{ completed_tasks }}
-                of
-                {{ total_tasks }}
-                tasks completed
-            </p>
+                <p>
+                    {{ completed_tasks }}
+                    of
+                    {{ total_tasks }}
+                    tasks completed
+                </p>
+            </div>
+
+            <strong>
+                {{ completion_percentage }}%
+            </strong>
+
         </div>
 
-        <strong>
-            {{ completion_percentage }}%
-        </strong>
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                style="width: {{ completion_percentage }}%;"
+            ></div>
+
+        </div>
 
     </div>
 
-</div>
 
-</div>
 
     <div class="task-filters">
 
-    <form method="GET">
+        <form method="GET">
 
-        <div class="search-box">
+            <div class="search-box">
 
-            <input
-                type="text"
-                name="search"
-                placeholder="Search tasks..."
-                value="{{ search }}"
-            >
-
-            <button type="submit">
-                Search
-            </button>
-
-        </div>
-
-
-        <div class="filter-options">
-
-            <select name="status">
-
-                <option value="">
-                    All Statuses
-                </option>
-
-                <option
-                    value="pending"
-                    {% if status == 'pending' %}selected{% endif %}
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search tasks..."
+                    value="{{ search }}"
                 >
-                    Pending
-                </option>
 
-                <option
-                    value="in_progress"
-                    {% if status == 'in_progress' %}selected{% endif %}
-                >
-                    In Progress
-                </option>
+                <button type="submit">
+                    Search
+                </button>
 
-                <option
-                    value="completed"
-                    {% if status == 'completed' %}selected{% endif %}
-                >
-                    Completed
-                </option>
-
-            </select>
+            </div>
 
 
-            <select name="priority">
+            <div class="filter-options">
 
-                <option value="">
-                    All Priorities
-                </option>
+                <select name="status">
 
-                <option
-                    value="low"
-                    {% if priority == 'low' %}selected{% endif %}
-                >
-                    Low
-                </option>
+                    <option value="">
+                        All Statuses
+                    </option>
 
-                <option
-                    value="medium"
-                    {% if priority == 'medium' %}selected{% endif %}
-                >
-                    Medium
-                </option>
+                    <option
+                        value="pending"
+                        {% if status == 'pending' %}selected{% endif %}
+                    >
+                        Pending
+                    </option>
 
-                <option
-                    value="high"
-                    {% if priority == 'high' %}selected{% endif %}
-                >
-                    High
-                </option>
+                    <option
+                        value="in_progress"
+                        {% if status == 'in_progress' %}selected{% endif %}
+                    >
+                        In Progress
+                    </option>
 
-            </select>
+                    <option
+                        value="completed"
+                        {% if status == 'completed' %}selected{% endif %}
+                    >
+                        Completed
+                    </option>
+
+                </select>
 
 
-            <a href="{% url 'task_list' %}">
-                Clear
-            </a>
+                <select name="priority">
 
-        </div>
+                    <option value="">
+                        All Priorities
+                    </option>
 
-    </form>
+                    <option
+                        value="low"
+                        {% if priority == 'low' %}selected{% endif %}
+                    >
+                        Low
+                    </option>
 
-</div>
+                    <option
+                        value="medium"
+                        {% if priority == 'medium' %}selected{% endif %}
+                    >
+                        Medium
+                    </option>
+
+                    <option
+                        value="high"
+                        {% if priority == 'high' %}selected{% endif %}
+                    >
+                        High
+                    </option>
+
+                </select>
+
+
+                <a href="{% url 'task_list' %}">
+                    Clear
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
 
 
     {% if tasks %}
@@ -203,9 +213,11 @@
 
                         <h2>{{ task.title }}</h2>
 
-                        <span class="priority {{ task.priority }}">
-                            {{ task.get_priority_display }}
-                        </span>
+                        <div class="task-badges">
+                            <span class="priority-badge priority {{ task.priority }}">
+                                {{ task.get_priority_display }}
+                            </span>
+                        </div>
 
                     </div>
 
@@ -227,28 +239,45 @@
 
                     <div class="task-info">
 
-                        <span>
+                        <div class="task-badges">
                             Status:
-                            <strong>
+                            <span class="status-badge status {{ task.status }}">
                                 {{ task.get_status_display }}
-                            </strong>
-                        </span>
+                            </span>
+                        </div>
 
 
                         {% if task.due_date %}
 
-                            <span>
-                                Due:
-                                <strong>
-                                    {{ task.due_date }}
-                                </strong>
-                            </span>
+                            <div class="task-due-date 
+                                {% if task.is_overdue %}
+                                    overdue
+                                {% elif task.status == 'completed' %}
+                                    completed-due
+                                {% endif %}
+                            ">
+                                {% if task.is_overdue %}
+                                    ⚠ {{ task.due_label }}
+                                {% elif task.status == 'completed' %}
+                                    ✓ Completed
+                                {% else %}
+                                    📅 {{ task.due_label }}
+                                {% endif %}
+                            </div>
 
                         {% endif %}
 
                     </div>
                     <div class="task-actions">
-                        <a href="{% url 'task_details' task.pk %}">View</a>
+                        <a href="{% url 'task_details' task.pk %}">View</a> &nbsp;&nbsp;
+                        <a href="{% url 'task_edit' task.pk %}">Edit</a> &nbsp;&nbsp;
+                        <a href="{% url 'toggle_task_status' task.pk %}" class="complete-btn">
+                            {% if task.status == 'completed' %}
+                                ↩ Mark Pending
+                            {% else %}
+                                ✓ Mark Complete
+                            {% endif %}
+                        </a>
                     </div>
 
                 </div>

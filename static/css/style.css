@@ -714,3 +714,161 @@ body {
     }
 
 }
+
+
+
+
+.complete-btn {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.complete-btn:hover {
+    text-decoration: underline;
+}
+
+
+
+
+.task-due-date {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.task-due-date.overdue {
+    font-weight: 700;
+}
+
+.task-due-date.completed-due {
+    font-weight: 600;
+}
+
+
+
+
+
+.task-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.status-badge,
+.priority-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-in_progress {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.status-completed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+
+.priority-low {
+    background: #e2e3e5;
+    color: #41464b;
+}
+
+.priority-medium {
+    background: #cff4fc;
+    color: #055160;
+}
+
+.priority-high {
+    background: #f8d7da;
+    color: #842029;
+}
+
+
+
+
+.task-card {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.task-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-card h3 {
+    margin: 0;
+}
+
+.task-description {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.task-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.task-actions a {
+    text-decoration: none;
+}
+
+
+
+
+.progress-card {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.progress-header h3 {
+    margin: 0 0 5px;
+}
+
+.progress-header p {
+    margin: 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
